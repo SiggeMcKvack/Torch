@@ -1,0 +1,230 @@
+================================================================================
+TORCH PROJECT - QUICK DEPENDENCY UPGRADE SUMMARY
+================================================================================
+
+Generated: November 10, 2025
+Analysis Status: COMPLETE - Multiple Security Issues Identified
+
+================================================================================
+CRITICAL ISSUES (Address Immediately)
+================================================================================
+
+1. TINYXML2 - CVE-2024-50614, CVE-2024-50615
+   ============================================
+   Current Version: 10.0.0
+   Recommended: 11.0.0
+   Severity: CRITICAL (DoS via malformed XML)
+   
+   Change in CMakeLists.txt line 269:
+   FROM: GIT_TAG 10.0.0
+   TO:   GIT_TAG 11.0.0
+   
+   Impact: Low (Minor API change: int -> size_t return types)
+   Timeline: 1-2 weeks
+   Breaking: Minor (return type change)
+
+================================================================================
+HIGH PRIORITY ISSUES (Next 2-4 weeks)
+================================================================================
+
+2. SPDLOG - CVE-2025-6140
+   =======================
+   Current Version: 1.12.0
+   Recommended: 1.16.0
+   Severity: HIGH (Resource exhaustion)
+   
+   Change in CMakeLists.txt lines 245 & 256:
+   FROM: GIT_TAG 7e635fca68d014934b4af8a1cf874f63989352b7
+   TO:   GIT_TAG v1.16.0
+   
+   Impact: Very Low (Mostly backward compatible)
+   Timeline: 1 week
+   Breaking: No
+
+3. CMAKE - C++20 Support
+   =====================
+   Current Version: 3.12
+   Recommended: 3.20+
+   Severity: HIGH (Limited C++20 support)
+   
+   Change in CMakeLists.txt line 1:
+   FROM: cmake_minimum_required(VERSION 3.12)
+   TO:   cmake_minimum_required(VERSION 3.20)
+   
+   Also update README.md dependency section
+   
+   Impact: Low (CI/CD updates needed)
+   Timeline: 1-2 weeks
+   Breaking: No (3.20 widely available)
+
+================================================================================
+MEDIUM PRIORITY (Optional - 1-2 months)
+================================================================================
+
+4. STORMLIB (If used - BUILD_STORMLIB=ON)
+   =======================================
+   Current Version: 9.22.0
+   Recommended: 9.30
+   Severity: MEDIUM (7 years of improvements)
+   
+   Change in lib/StormLib/CMakeLists.txt lines 346-350:
+   FROM: VERSION_MINOR "22"
+   TO:   VERSION_MINOR "30"
+   
+   Timeline: 2-4 weeks
+   Breaking: No
+
+5. CLI11 (Optional)
+   ================
+   Current Version: 2.3.2
+   Latest: 2.6.0
+   Severity: LOW (No CVEs, stable version)
+   Recommendation: Stay with 2.3.2 unless new features needed
+   
+   Note: Only upgrade if needed, already stable
+
+6. LIBGFXD
+   ========
+   Current: Pinned to commit hash
+   Recommendation: Investigate tagging/versioning on GitHub
+   Timeline: 1 week research
+   Breaking: Unknown
+
+================================================================================
+NO ACTION NEEDED
+================================================================================
+
+YAML-CPP 0.8.0
+   Current version is latest stable
+   No CVEs in 0.8.0
+   No action required
+
+================================================================================
+UPGRADE EXECUTION PLAN
+================================================================================
+
+Week 1-2: CRITICAL FIXES
+  Phase 1A: TinyXML2 10.0.0 → 11.0.0
+    - Update CMakeLists.txt
+    - Review code for int->size_t changes
+    - Test XML parsing functionality
+    - Merge to main
+
+Phase 2A: spdlog 1.12.0 → 1.16.0
+  Phase 2B: CMake 3.12 → 3.20
+    - Update CMakeLists.txt (both files)
+    - Update README.md
+    - Update CI/CD pipelines
+    - Test on all platforms
+    - Merge to main
+
+Month 2: MEDIUM PRIORITY (Optional)
+  - StormLib 9.22.0 → 9.30 (if applicable)
+  - CLI11 optional upgrade
+  - libgfxd investigation and tagging
+
+================================================================================
+TESTING REQUIREMENTS
+================================================================================
+
+For TinyXML2:
+  [ ] Code search for tinyxml2 return type usage
+  [ ] Compile test
+  [ ] XML parsing tests (valid & malformed files)
+  [ ] Full regression test suite
+  [ ] All platforms (Windows, Linux, macOS)
+
+For spdlog:
+  [ ] Compile test
+  [ ] Logging functionality tests
+  [ ] Async logger tests
+  [ ] Performance benchmarks
+  [ ] All platforms
+
+For CMake:
+  [ ] Test on Windows (MSVC 2022)
+  [ ] Test on Linux (GCC/Clang)
+  [ ] Test on macOS (Xcode)
+  [ ] Emscripten builds
+  [ ] C++20 feature compilation
+  [ ] All warnings/errors checked
+
+================================================================================
+FILES TO MODIFY
+================================================================================
+
+Primary:
+  - /home/user/Torch/CMakeLists.txt (lines 1, 245, 256, 269)
+  - /home/user/Torch/README.md (CMake requirement section)
+  
+Optional:
+  - /home/user/Torch/lib/StormLib/CMakeLists.txt (if StormLib upgrade)
+  - /home/user/Torch/lib/CLI11.hpp (if CLI11 upgrade)
+  - CI/CD configuration files
+
+================================================================================
+RISK ASSESSMENT
+================================================================================
+
+TinyXML2 Upgrade: VERY LOW RISK
+  - Minor API change (int → size_t)
+  - All current compilers support this
+  - Clear migration path
+
+spdlog Upgrade: VERY LOW RISK
+  - Backward compatible
+  - Widely tested library
+  - Small, focused change
+
+CMake Upgrade: LOW RISK
+  - 3.20 widely available
+  - No code changes needed
+  - May need CI/CD updates
+
+================================================================================
+SECURITY IMPACT
+================================================================================
+
+Current State: VULNERABLE
+  - TinyXML2: 2 CVEs (CVE-2024-50614, CVE-2024-50615)
+  - spdlog: 1 CVE (CVE-2025-6140)
+  - Risk: DoS attacks via malformed input
+
+Post-Upgrade: SECURE
+  - All known CVEs patched
+  - Security advisories resolved
+  - Compliant with current best practices
+
+================================================================================
+TOTAL EFFORT ESTIMATE
+================================================================================
+
+Time to Implement:
+  - Phase 1 (CRITICAL): 1-2 weeks
+  - Phase 2 (HIGH): 2-4 weeks
+  - Phase 3 (MEDIUM): 1-2 weeks
+
+Resource Requirements:
+  - 1-2 developers
+  - CI/CD infrastructure testing
+  - Code review capacity
+
+Risk: LOW
+Success Probability: HIGH (95%+)
+
+================================================================================
+NEXT STEPS
+================================================================================
+
+1. Review DEPENDENCY_ANALYSIS.md for full details
+2. Review UPGRADE_CHECKLIST.md for detailed procedures
+3. Start Phase 1 (TinyXML2) immediately
+4. Schedule Phase 2 (spdlog + CMake) for next sprint
+5. Schedule Phase 3 (Medium Priority) for following month
+6. Create PR for each phase with clear testing results
+
+================================================================================
+
+For detailed analysis, see: DEPENDENCY_ANALYSIS.md
+For step-by-step procedure, see: UPGRADE_CHECKLIST.md
+
